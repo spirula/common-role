@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Spirula Admins 
+  company: Spirula Systems
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  - name: Debian
+    versions:
+    - wheezy
+  categories:
+  - cloud
+  - system
+  - web
+dependencies: []

@@ -1,0 +1,13 @@
+- name: Configure Rkunter notification email
+  template: src=rkhunter.conf dest=/etc/rkhunter.conf
+  tags:
+    - rkhunter
+  notify:
+    - update rkhunter
+
+- name: Configure Rkhunter reporting email
+  template: src=default.rkhunter dest=/etc/default/rkhunter
+  tags:
+    - rkhunter
+  notify:
+    - update rkhunter

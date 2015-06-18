@@ -1,0 +1,14 @@
+---
+# defaults file for common
+admins:
+  - name: admin1
+    key: "{{ lookup('file', 'admin1.pub') }}"
+
+  - name: admin2
+    key: "{{ lookup('file', 'admin2.pub') }}"
+
+  - name: admin3
+    key: "{{ lookup('file', 'admin3.pub') }}"
+
+timezone: "UTC"
+admin_mail: admin@example.com

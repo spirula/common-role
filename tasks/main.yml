@@ -1,0 +1,58 @@
+---
+# Tasks File For Common
+
+- name: Disable IPv6
+  sysctl: name="net.ipv6.conf.all.disable_ipv6" value=1 sysctl_set=yes state=present reload=yes
+
+- name: Install NTP
+  apt: name=ntp state=present update_cache=yes cache_valid_time=600
+
+- name: Start NTP
+  service: name=ntp state=started enabled=yes
+
+- name: Setup needed packages
+  apt: name={{ item }} state=present update_cache=yes cache_valid_time=600
+  with_items:
+    - curl
+    - sudo
+    - screen 
+    - vim
+    - strace
+    - lsof
+    - htop
+    - mailutils
+    - elinks
+    - ccze
+    - tree
+    - git-core
+
+- name: Installing rkhunter pkg without recommended pkgs
+  apt: name=rkhunter state=latest update_cache=yes cache_valid_time=600 install_recommends=no
+
+- name: Enable Screen Scrolling
+  lineinfile: dest=/etc/screenrc line="termcapinfo xterm|xterms|xs|rxvt ti@:te@" insertafter=EOF
+
+- name: Enable vim settings
+  lineinfile: dest=/etc/vim/vimrc line="{{ item }}" insertafter=EOF
+  with_items:
+    - syntax on
+    - set background=dark
+
+- name: Update alternatives
+  command: update-alternatives --set editor /usr/bin/vim.basic
+  ignore_errors: yes
+
+- name: Enable timed BASH log
+  lineinfile: dest=/etc/bash.bashrc line='export HISTTIMEFORMAT="%F %T "' insertafter=EOF
+
+- name: Set locale
+  locale_gen: name=en_US.UTF-8 state=present
+
+- name: Set timezone
+  shell: echo {{ timezone }}> /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+
+- name: upload rkhunter configuration 
+  include: rkhunter.yml
+
+- name: Adding admins and giving them full access on the server
+  include: admins.yml  

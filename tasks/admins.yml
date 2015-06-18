@@ -1,0 +1,21 @@
+- name: create admins groups
+  group: name=admins  system=no
+  tags: 
+    - admins
+
+- name: Add  admins group to sudoers
+  lineinfile: dest=/etc/sudoers line='%admins ALL=(ALL:ALL) NOPASSWD:ALL' state=present
+  tags: 
+    - admins
+
+- name: Add Admins on the server
+  user: name={{ item.name }} groups=admins shell=/bin/bash state=present
+  with_items: admins 
+  tags:
+    - admins
+
+- name: Add admins ssh keys
+  authorized_key: user={{ item.name }} key="{{ item.key }}"
+  with_items: admins
+  tags:
+    - admins
